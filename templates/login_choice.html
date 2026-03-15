@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="landing-wrapper">
+
+    <h1>Unified Applications Recommendation System</h1>
+
+    <div class="landing-buttons">
+        <a href="{{ url_for('login') }}" class="btn btn-primary">
+            Login as User
+        </a>
+
+        <a href="{{ url_for('admin_login') }}" class="btn btn-danger">
+            Login as Admin
+        </a>
+
+        <a href="{{ url_for('guest') }}" class="btn btn-secondary">
+            Continue as Guest
+        </a>
+    </div>
+
+</div>
+
+{% endblock %}

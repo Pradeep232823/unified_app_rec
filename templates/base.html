@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Unified Applications Recommendation System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="layout-root">
+
+<nav>
+    <div class="container nav-container">
+        <a href="{{ url_for('home') }}" class="logo">UniAppRec</a>
+
+        <ul class="nav-links">
+
+            {% if role == "admin" %}
+                <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+                <li><a href="{{ url_for('logout') }}">Logout</a></li>
+
+            {% elif role == "user" %}
+                <li><a href="{{ url_for('home') }}">Home</a></li>
+                <li><a href="{{ url_for('recommend') }}">Recommend</a></li>
+                <li><a href="{{ url_for('wishlist') }}">Wishlist</a></li>
+                <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+                <li><a href="{{ url_for('logout') }}">Logout</a></li>
+
+            {% elif role == "guest" %}
+                <li><a href="{{ url_for('home') }}">Home</a></li>
+                <li><a href="{{ url_for('logout') }}">Logout</a></li>
+
+            {% else %}
+                {% if request.endpoint != 'landing' %}
+                    <li><a href="{{ url_for('landing') }}">Sign In</a></li>
+                {% endif %}
+            {% endif %}
+
+        </ul>
+    </div>
+</nav>
+
+<!-- IMPROVED FLASH WITH CATEGORY SUPPORT -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <div id="toast" class="toast {{ messages[0][0] }}">
+            {{ messages[0][1] }}
+        </div>
+    {% endif %}
+{% endwith %}
+
+<main class="container main-content">
+    {% block content %}{% endblock %}
+</main>
+
+<footer>
+    <p>&copy; 2026 Unified Applications Recommendation System</p>
+</footer>
+
+{% block scripts %}{% endblock %}
+
+<script>
+function openModal(id) {
+    const modal = document.getElementById("modal-" + id);
+    if (modal) {
+        modal.style.display = "block";
+    }
+}
+
+function closeModal(id) {
+    const modal = document.getElementById("modal-" + id);
+    if (modal) {
+        modal.style.display = "none";
+    }
+}
+
+// Close modal when clicking outside
+window.onclick = function(event) {
+    const modals = document.querySelectorAll(".modal");
+    modals.forEach(function(modal) {
+        if (event.target === modal) {
+            modal.style.display = "none";
+        }
+    });
+};
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    // Reopen modal if needed
+    const params = new URLSearchParams(window.location.search);
+    const modalToOpen = params.get("open_modal");
+
+    if (modalToOpen) {
+        const modal = document.getElementById("modal-" + modalToOpen);
+        if (modal) {
+            modal.style.display = "block";
+        }
+    }
+
+    // Show toast popup
+    const toast = document.getElementById("toast");
+    if (toast) {
+        toast.classList.add("show");
+
+        setTimeout(() => {
+            toast.classList.remove("show");
+        }, 3000);
+
+        // Prevent toast from appearing again
+        setTimeout(() => {
+            toast.remove();
+        }, 3500);
+    }
+
+});
+</script>
+
+</body>
+</html>
